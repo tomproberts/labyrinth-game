@@ -1,13 +1,18 @@
 <template>
-  <h1>Labyrinth-Game</h1>
+  <h1>
+    Labyrinth-Game
+    <a class="github-link" href="https://github.com/tomproberts/labyrinth-game">
+      <i class="fab fa-github"/>
+    </a>
+  </h1>
   <br/>
-  <MazeView :maze="maze"/>
+  <MazeView :maze="maze" :goalX="goalX" :goalY="goalY" @won="won"/>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import MazeView from './components/MazeView.vue'
-import { generateMaze } from '@/generation/mazegen'
+import { Options, Vue } from 'vue-class-component';
+import MazeView from './components/MazeView.vue';
+import { generateMaze } from '@/generation/mazegen';
 
 @Options({
   components: {
@@ -16,7 +21,19 @@ import { generateMaze } from '@/generation/mazegen'
 })
 export default class App extends Vue {
   get maze() {
-    return generateMaze(6, 5)
+    return generateMaze(10, 7);
+  }
+
+  get goalX() {
+    return 5;
+  }
+
+  get goalY() {
+    return 6;
+  }
+
+  private won() {
+    alert('Won');
   }
 }
 </script>
@@ -37,5 +54,10 @@ body {
 
 h1 {
   font-weight: lighter;
+}
+
+.github-link {
+  margin-left: 0.5rem;
+  color: #e0e0e0;
 }
 </style>

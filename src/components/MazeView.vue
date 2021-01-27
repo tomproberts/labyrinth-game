@@ -3,7 +3,7 @@
     <table>
       <tr v-for="y in height" :key="y">
         <td v-for="(x, index) in maze[y - 1]" :key="index"
-            :class="`wall${x}`">
+            :class="`wall${x}`" :id="(index === goalX && y === goalY + 1) ? 'goal' : ''">
           <div :class="(charX === index && charY + 1 === y) ? 'active' : ''"/>
         </td>
       </tr>
@@ -12,62 +12,86 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
+import { Options, Vue } from 'vue-class-component';
 
 @Options({
   props: {
-    maze: Array
-  }
+    maze: Array,
+    goalX: Number,
+    goalY: Number
+  },
+  emits: ['won']
 })
 export default class MazeView extends Vue {
   maze!: number[][];
+  goalX!: number;
+  goalY!: number;
+
   private charX = 0;
   private charY = 0;
 
   get height() {
-    return this.maze.length
+    return this.maze.length;
   }
 
   get width() {
-    return this.height > 0 ? this.maze[0].length : 0
+    return this.height > 0 ? this.maze[0].length : 0;
+  }
+
+  private checkWin() {
+    if (this.charX === this.goalX && this.charY === this.goalY) {
+      this.$emit('won');
+    }
   }
 
   mounted() {
-    /* Bind arrowkeys to character movement */
     const arrowUp = () => {
-      this.charY -= 1
-    }
+      if (this.maze[this.charY][this.charX] & 2) {
+        this.charY -= 1;
+        this.checkWin();
+      }
+    };
 
     const arrowDown = () => {
-      this.charY += 1
-    }
+      if (this.maze[this.charY][this.charX] & 1) {
+        this.charY += 1;
+        this.checkWin();
+      }
+    };
 
     const arrowLeft = () => {
-      this.charX -= 1
-    }
+      if (this.maze[this.charY][this.charX] & 8) {
+        this.charX -= 1;
+        this.checkWin();
+      }
+    };
 
     const arrowRight = () => {
-      this.charX += 1
-    }
+      if (this.maze[this.charY][this.charX] & 4) {
+        this.charX += 1;
+        this.checkWin();
+      }
+    };
 
+    /* Bind arrowkeys to character movement */
     window.addEventListener('keydown', function(e) {
       switch (e.key) {
         case 'ArrowUp':
-          arrowUp()
-          break
+          arrowUp();
+          break;
         case 'ArrowDown':
-          arrowDown()
-          break
+          arrowDown();
+          break;
         case 'ArrowLeft':
-          arrowLeft()
-          break
+          arrowLeft();
+          break;
         case 'ArrowRight':
-          arrowRight()
-          break
+          arrowRight();
+          break;
         default:
-          break
+          break;
       }
-    })
+    });
   }
 }
 </script>
@@ -108,5 +132,10 @@ td {
   height: 40%;
   margin: 30%;
   box-shadow: 0 0 5px 5px #fff, 0 0 10px 10px #aff;
+  transition-duration: 0.1s;
+}
+
+#goal {
+  background: green;
 }
 </style>

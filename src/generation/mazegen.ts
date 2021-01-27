@@ -27,7 +27,7 @@ const opposite: Record<Direction, Direction> = {
   [Direction.S]: Direction.N,
   [Direction.E]: Direction.W,
   [Direction.W]: Direction.E
-}
+};
 
 function getDirections(): Direction[] {
   const directions = [Direction.N, Direction.S, Direction.E, Direction.W];
