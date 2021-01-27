@@ -1,27 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <h1>Labyrinth-Game</h1>
+  <br/>
+  <MazeView/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
-import HelloWorld from './components/HelloWorld.vue'
+import MazeView from './components/MazeView.vue'
 
 @Options({
   components: {
-    HelloWorld
+    MazeView
   }
 })
 export default class App extends Vue {}
 </script>
 
 <style>
+body {
+  background-color: #202020;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #e0e0e0;
   margin-top: 60px;
+}
+
+h1 {
+  font-weight: lighter;
 }
 </style>
