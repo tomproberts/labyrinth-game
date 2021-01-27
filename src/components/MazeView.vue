@@ -20,7 +20,15 @@ import { Options, Vue } from 'vue-class-component';
     goalX: Number,
     goalY: Number
   },
-  emits: ['stop', 'start']
+  emits: ['stop', 'start'],
+  watch: {
+    maze() {
+      /* If the maze changes, reset character position and started status. */
+      this.charX = 0;
+      this.charY = 0;
+      this.started = false;
+    }
+  }
 })
 export default class MazeView extends Vue {
   maze!: number[][];
@@ -33,10 +41,6 @@ export default class MazeView extends Vue {
 
   get height() {
     return this.maze.length;
-  }
-
-  get width() {
-    return this.height > 0 ? this.maze[0].length : 0;
   }
 
   private checkWin() {
@@ -150,6 +154,8 @@ td {
 }
 
 #goal {
-  background: green;
+  background: none;
+  border-radius: 100%;
+  box-shadow: 3px 3px 1px 1px #fff, 1px 1px 2px 2px #aff;
 }
 </style>

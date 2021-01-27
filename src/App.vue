@@ -7,6 +7,11 @@
   </h1>
   <p>{{ timeElapsed }}</p>
   <MazeView :maze="maze" :goalX="goalX" :goalY="goalY" @stop="stop" @start="startTimer"/>
+  <p>
+    <button @click="regenerateMaze(10, 7)">Easy</button>
+    <button @click="regenerateMaze(20, 15)">Medium</button>
+    <button @click="regenerateMaze(30, 20)">Hard</button>
+  </p>
 </template>
 
 <script lang="ts">
@@ -32,6 +37,10 @@ export default class App extends Vue {
     /* Randomly generate goal anywhere on the maze. */
     this.goalX = Math.floor(Math.random() * (width - 1));
     this.goalY = Math.floor(Math.random() * (height - 1));
+
+    /* Reset timer and positions */
+    clearInterval(this.timer);
+    this.timePassed = 0;
   }
 
   get timeElapsed(): string {
@@ -74,5 +83,18 @@ h1 {
 .github-link {
   margin-left: 0.5rem;
   color: #e0e0e0;
+}
+
+button {
+  margin: 0 0.2rem;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+  color: #202020;
+}
+
+button:hover {
+  background-color: #d0d0d0;
 }
 </style>
