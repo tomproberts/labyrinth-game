@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <table>
       <tr v-for="y in height" :key="y">
         <td v-for="(x, index) in maze[y - 1]" :key="index"
@@ -20,7 +20,7 @@ import { Options, Vue } from 'vue-class-component';
     goalX: Number,
     goalY: Number
   },
-  emits: ['won']
+  emits: ['stop', 'start']
 })
 export default class MazeView extends Vue {
   maze!: number[][];
@@ -29,6 +29,7 @@ export default class MazeView extends Vue {
 
   private charX = 0;
   private charY = 0;
+  private started = false;
 
   get height() {
     return this.maze.length;
@@ -40,7 +41,7 @@ export default class MazeView extends Vue {
 
   private checkWin() {
     if (this.charX === this.goalX && this.charY === this.goalY) {
-      this.$emit('won');
+      this.$emit('stop');
     }
   }
 
@@ -73,8 +74,16 @@ export default class MazeView extends Vue {
       }
     };
 
+    const start = () => {
+      if (!this.started) {
+        this.started = true;
+        this.$emit('start');
+      }
+    };
+
     /* Bind arrowkeys to character movement */
     window.addEventListener('keydown', function(e) {
+      start();
       switch (e.key) {
         case 'ArrowUp':
           arrowUp();
@@ -97,10 +106,15 @@ export default class MazeView extends Vue {
 </script>
 
 <style scoped>
+.container {
+  max-height: 80%;
+}
+
 table {
   color: #e0e0e0;
   margin: auto;
   border-collapse: collapse;
+  max-width: 80%;
 }
 
 td {

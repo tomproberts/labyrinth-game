@@ -5,8 +5,8 @@
       <i class="fab fa-github"/>
     </a>
   </h1>
-  <br/>
-  <MazeView :maze="maze" :goalX="goalX" :goalY="goalY" @won="won"/>
+  <p>{{ timeElapsed }}</p>
+  <MazeView :maze="maze" :goalX="goalX" :goalY="goalY" @stop="stop" @start="startTimer"/>
 </template>
 
 <script lang="ts">
@@ -20,20 +20,35 @@ import { generateMaze } from '@/generation/mazegen';
   }
 })
 export default class App extends Vue {
-  get maze() {
-    return generateMaze(10, 7);
+  private maze = generateMaze(10, 7);
+  private timePassed = 0;
+  private timer = 0;
+  private goalX = 5;
+  private goalY = 5;
+
+  private regenerateMaze(width: number, height: number) {
+    this.maze = generateMaze(width, height);
+
+    /* Randomly generate goal anywhere on the maze. */
+    this.goalX = Math.floor(Math.random() * (width - 1));
+    this.goalY = Math.floor(Math.random() * (height - 1));
   }
 
-  get goalX() {
-    return 5;
+  get timeElapsed(): string {
+    const minutes = Math.floor(this.timePassed / 60);
+    const seconds = this.timePassed % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
-  get goalY() {
-    return 6;
+  private stop() {
+    clearInterval(this.timer); // Stop timer
+    alert(`Completed! It only took you ${this.timePassed} seconds!`);
   }
 
-  private won() {
-    alert('Won');
+  private startTimer() {
+    this.timer = setInterval(() => {
+      this.timePassed += 1;
+    }, 1000);
   }
 }
 </script>
