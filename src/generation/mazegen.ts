@@ -29,8 +29,19 @@ const opposite: Record<Direction, Direction> = {
   [Direction.W]: Direction.E
 }
 
-function carveWalls(currX: number, currY: number, maze: number[][]) {
+function getDirections(): Direction[] {
   const directions = [Direction.N, Direction.S, Direction.E, Direction.W];
+
+  /* Simple shuffle algorithm. */
+  for (let oldPos = 0; oldPos < directions.length; oldPos++) {
+    const newPos = Math.floor(Math.random() * (oldPos + 1));
+    [directions[oldPos], directions[newPos]] = [directions[newPos], directions[oldPos]];
+  }
+  return directions;
+}
+
+function carveWalls(currX: number, currY: number, maze: number[][]) {
+  const directions = getDirections();
   for (const direction of directions) {
     const nextX = currX + diffX[direction];
     const nextY = currY + diffY[direction];
@@ -39,7 +50,8 @@ function carveWalls(currX: number, currY: number, maze: number[][]) {
        been visited before. */
     if (nextX >= 0 && nextX < maze[0].length &&
       nextY >= 0 && nextY < maze.length && maze[nextY][nextX] === 0) {
-      console.log(`Valid: moving to (${nextX}, ${nextY})`);
+      /* Add carved walls: Logical bit-wise OR will change 0b0000 to 0b0001
+         if a new North Wall is to be created, for instance. */
       maze[currY][currX] |= direction;
       maze[nextY][nextX] |= opposite[direction];
 
