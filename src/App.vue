@@ -1,19 +1,24 @@
 <template>
   <h1>Labyrinth-Game</h1>
   <br/>
-  <MazeView/>
+  <MazeView :maze="maze"/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 import MazeView from './components/MazeView.vue'
+import { generateMaze } from '@/generation/mazegen'
 
 @Options({
   components: {
     MazeView
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  get maze() {
+    return generateMaze(6, 5)
+  }
+}
 </script>
 
 <style>

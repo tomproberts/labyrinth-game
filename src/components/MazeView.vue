@@ -11,9 +11,13 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component'
 
-@Options({})
+@Options({
+  props: {
+    maze: Array
+  }
+})
 export default class MazeView extends Vue {
-  private maze: number[][] = [[2, 4], [3, 4], [1, 4]];
+  maze!: number[][];
 
   get height() {
     return this.maze.length
@@ -39,11 +43,11 @@ td {
 }
 
 .wall1, .wall3, .wall5, .wall7, .wall9, .wall11, .wall13, .wall15 {
-  border-top-width: 0;
+  border-bottom-width: 0;
 }
 
 .wall2, .wall3, .wall6, .wall7, .wall10, .wall11, .wall14, .wall15 {
-  border-bottom-width: 0;
+  border-top-width: 0;
 }
 
 .wall4, .wall5, .wall6, .wall7, .wall12, .wall13, .wall14, .wall15 {
